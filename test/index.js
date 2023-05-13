@@ -15,6 +15,9 @@ if (!Object.is(
       [[fetch]] # comment
       files = ['./utils.py'] # comment
 
+      [[fetch]]
+      files = ['./other.py']
+
       # comment
       packages = ['a', 'b'] # comment
     `)
@@ -28,7 +31,10 @@ if (!Object.is(
         lang: 'python'
       }
     ],
-    fetch: [ { files: ['./utils.py'] } ],
+    fetch: [
+      { files: [ './utils.py' ] },
+      { files: [ './other.py' ] }
+    ],
     packages: [ 'a', 'b' ]
   })
 )) throw new Error('shenanigans');
