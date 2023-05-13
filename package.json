@@ -1,6 +1,6 @@
 {
   "name": "basic-toml",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "A simple TOML parser with tons of limitations yet good enough for various projects",
   "main": "./cjs/index.js",
   "scripts": {
