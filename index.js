@@ -18,7 +18,7 @@ var basicToml = (function (exports) {
   const getValue = str => JSON.parse(
     str.replace(
       /(["'])(?:(?=(\\?))\2.)*?\1/g,
-      ($0, $1) => `"${$0.slice(1, -1)}"`
+      ($0, _) => `"${$0.slice(1, -1)}"`
     )
   );
 
