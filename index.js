@@ -6,16 +6,39 @@ var basicToml = (function (exports) {
   const {isArray} = Array;
 
   /**
+   * Remove multi-line arrays' entries.
+   * @param {string} str the TOML to sanitize
+   * @returns {string} the sanitized TOML
+   */
+  const noMultiLineArray = str => str
+    .replace(/,\s*[\r\n]+/g, ', ')
+    .replace(/\[\s*[\r\n]+/g, '[')
+    .replace(/[\r\n]+\s*]/g, ']')
+  ;
+
+  /**
    * Given a `'string'` or a `"string"` returns a JSON compatible string.
    * @param {string} str a TOML entry to parse
    * @returns {string}
    */
-  const getValue = str => JSON.parse(
-    str.replace(
-      /(["'])(?:(?=(\\?))\2.)*?\1/g,
-      ($0, _) => `"${$0.slice(1, -1)}"`
-    )
-  );
+  const getValue = str => {
+    const strings = [];
+    const dates = [];
+    return JSON.parse(
+      str
+        .replace(
+          /(["'])(?:(?=(\\?))\2.)*?\1/g,
+          value => `"s${strings.push(value.slice(1, -1)) - 1}"`
+        )
+        .replace(
+          /\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2}:\d{2}(?:-\d{2}:\d{2})?)?/g,
+          value => `"d${dates.push(new Date(value)) - 1}"`
+        ),
+      (_, value) => typeof value === 'string' ?
+        (value[0] === 's' ? strings : dates)[value.slice(1)] :
+        value
+    );
+  };
 
   /**
    * Crawl the `json` object via the given array of keys and handle array entries.
@@ -44,7 +67,7 @@ var basicToml = (function (exports) {
   const parse = text => {
     const json = {};
     let entry = json;
-    for (let line of text.split(/[\r\n]+/)) {
+    for (let line of noMultiLineArray(text).split(/[\r\n]+/)) {
       if ((line = line.trim()) && !line.startsWith('#')) {
         if (/^(\[+)(.*?)\]+/.test(line))
           entry = getPath(RegExp.$2.trim().split('.'), json, RegExp.$1 !== '[');
