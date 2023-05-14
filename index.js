@@ -44,15 +44,12 @@ var basicToml = (function (exports) {
   const parse = text => {
     const json = {};
     let entry = json;
-    for (let line of text.split(/(?:\r\n|\n|\r)/)) {
-      line = line.trim();
-      if (!line || line.startsWith('#'))
-        continue;
-      else if (/^([[]{1,2})(.*?)[\]]{1,2}/.test(line))
-        entry = getPath(RegExp.$2.trim().split('.'), json, RegExp.$1 === '[[');
-      else {
-        const [_, property, value] = line.match(/^(\S+)\s*=([^#]+)/);
-        entry[property] = getValue(value.trim());
+    for (let line of text.split(/[\r\n]+/)) {
+      if ((line = line.trim()) && !line.startsWith('#')) {
+        if (/^(\[+)(.*?)\]+/.test(line))
+          entry = getPath(RegExp.$2.trim().split('.'), json, RegExp.$1 !== '[');
+        else if (/^(\S+?)\s*=([^#]+)/.test(line))
+          entry[RegExp.$1] = getValue(RegExp.$2.trim());
       }
     }
     return json;
