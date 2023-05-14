@@ -1,12 +1,7 @@
 'use strict';
 /*! (c) Andrea Giammarchi - ISC */
 
-/**
- * Remove any `# comment` from any single line string.
- * @param {string} str the string with a possible comment
- * @returns {string}
- */
-const noComment = str => str.replace(/#.*/, '').trim();
+const {isArray} = Array;
 
 /**
  * Given a `'string'` or a `"string"` returns a JSON compatible string.
@@ -21,30 +16,41 @@ const getValue = str => JSON.parse(
 );
 
 /**
+ * Crawl the `json` object via the given array of keys and handle array entries.
+ * @param {string[]} keys a path with all keys to reach the entry
+ * @param {object} entry the root entry of the TOML
+ * @param {boolean} asArray handle array entries
+ * @returns {object} the current entry to handle
+ */
+const getPath = (keys, entry, asArray) => {
+  for (let i = 0, {length} = keys, last = length - 1; i < length; i++) {
+    entry = entry[keys[i]] || (entry[keys[i]] = (asArray && (i === last) ? [] : {}));
+    if (isArray(entry)) {
+      if ((i === last) || !entry.length)
+        entry.push({});
+      entry = entry.at(-1);
+    }
+  }
+  return entry;
+};
+
+/**
  * Given a simple subset of a TOML file, returns its JS equivalent.
  * @param {string} text the TOML text to parse
  * @returns {object} the TOML equivalent as JSON serializable
  */
 const parse = text => {
   const json = {};
-  let entry = null;
+  let entry = json;
   for (let line of text.split(/(?:\r\n|\n|\r)/)) {
     line = line.trim();
-    if (!line) {
-      entry = null;
+    if (!line || line.startsWith('#'))
       continue;
-    }
-    else if (line.startsWith('#'))
-      continue;
-    else if (line.startsWith('[[')) {
-      const key = noComment(line).replace(/^\[\[(.+?)\]\]$/, '$1').trim();
-      (json[key] || (json[key] = [])).push(entry = {});
-    }
-    else if (line.startsWith('['))
-      json[noComment(line).replace(/^\[(.+?)\]$/, '$1').trim()] = (entry = {});
+    else if (/^([[]{1,2})(.*?)[\]]{1,2}/.test(line))
+      entry = getPath(RegExp.$2.trim().split('.'), json, RegExp.$1 === '[[');
     else {
-      const [_, property, value] = noComment(line).match(/^(\S+)\s*=(.+)$/);
-      (entry || json)[property] = getValue(value.trim());
+      const [_, property, value] = line.match(/^(\S+)\s*=([^#]+)/);
+      entry[property] = getValue(value.trim());
     }
   }
   return json;

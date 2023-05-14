@@ -10,7 +10,10 @@ This module parses (so far) only these kind of entries:
 
 ```toml
 # any single line comment
-[field] # any global entry
+packages = ['a', 'b'] # or end comment
+
+# any propety as object (or nested objects)
+[field]
 simple = true # any JSON compatible value
 version = 0
 
@@ -21,7 +24,4 @@ name = 'spot-on'
 
 [[preload]]
 files = ['./3rd-party.js']
-
-# direct global field
-packages = ['a', 'b'] # comment
 ```
