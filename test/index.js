@@ -98,11 +98,9 @@ assert(
     kill_signal = "SIGINT"
     kill_timeout = 5
     processes = []
+    env = { PORT = "8080" }
 
-    [env] # comment
-      PORT = "8080"
-
-    [experimental]
+    [experimental] # comment
       auto_rollback = true
       enable_consul = true
 

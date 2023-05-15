@@ -9,7 +9,7 @@ const {parse: jsonParse} = JSON;
  * @returns {string}
  */
 const getValue = (str, foreign) => jsonParse(
-  str,
+  str.replace(/(\S+?)\s*=/g, '"$1":'),
   (_, value) => typeof value === 'string' ?
     foreign[value[0]][value.slice(1)] :
     value
@@ -51,7 +51,7 @@ const mapForeign = (toml, strings, dates) => [
     )
     // map dates in the TOML
     .replace(
-      /\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2}:\d{2}(?:-\d{2}:\d{2})?)?/g,
+      /\d{2,}([:-]\d{2}){2}([ T:-][\dZ:-]+)?/g,
       value => `"d${dates.push(new Date(value)) - 1}"`
     )
     // avoid multi-line array entries

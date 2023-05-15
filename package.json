@@ -1,7 +1,7 @@
 {
   "name": "basic-toml",
   "version": "0.2.3",
-  "description": "A simple TOML parser with tons of limitations yet good enough for various projects",
+  "description": "A simple TOML subset parser",
   "main": "./cjs/index.js",
   "scripts": {
     "build": "npm run cjs && npm run rollup:es && npm run rollup:index && npm run test",
@@ -11,8 +11,8 @@
     "test": "c8 node test/index.js",
     "coverage": "mkdir -p ./coverage; c8 report --reporter=text-lcov > ./coverage/lcov.info"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["toml", "parser", "lightweight"],
+  "author": "Andrea Giammarchi",
   "license": "ISC",
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^15.0.2",
