@@ -2,7 +2,7 @@
 
 [![build](https://github.com/WebReflection/basic-toml/actions/workflows/node.js.yml/badge.svg)](https://github.com/WebReflection/basic-toml/actions/workflows/node.js.yml) [![Coverage Status](https://coveralls.io/repos/github/WebReflection/basic-toml/badge.svg?branch=main)](https://coveralls.io/github/WebReflection/basic-toml?branch=main)
 
-A simple TOML subset parser.
+A simple TOML subset parser. ~500 bytes minified with brotli.
 
 ## TOML Subset
 

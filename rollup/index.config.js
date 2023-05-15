@@ -10,10 +10,7 @@ export default {
   ],
   
   output: {
-    esModule: false,
-    exports: 'named',
-    file: './index.js',
-    format: 'iife',
-    name: 'basicToml'
+    esModule: true,
+    file: './index.js'
   }
 };
