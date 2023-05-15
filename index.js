@@ -3,9 +3,20 @@
 const {isArray} = Array;
 const {parse: jsonParse} = JSON;
 
+/** @typedef {{s: string[], d: Date[]}} Foreign foreign strings and dates */
+
+/**
+ * Transform quoted keys into regular keys.
+ * @param {string} str the key to eventually normalize
+ * @param {Foreign} foreign foreign strings and dates
+ * @returns 
+ */
+const getKey = (str, {s}) => str.replace(/"s(\d+)"/g, (_, $1) => s[$1]);
+
 /**
  * Given a `'string'` or a `"string"` returns a JSON compatible string.
  * @param {string} str a TOML entry to parse
+ * @param {Foreign} foreign foreign strings and dates
  * @returns {string}
  */
 const getValue = (str, foreign) => jsonParse(
@@ -18,13 +29,15 @@ const getValue = (str, foreign) => jsonParse(
 /**
  * Crawl the `json` object via the given array of keys and handle array entries.
  * @param {string[]} keys a path with all keys to reach the entry
+ * @param {Foreign} foreign foreign strings and dates
  * @param {object} entry the root entry of the TOML
  * @param {boolean} asArray handle array entries
  * @returns {object} the current entry to handle
  */
-const getPath = (keys, entry, asArray) => {
+const getPath = (keys, foreign, entry, asArray) => {
   for (let i = 0, {length} = keys, last = length - 1; i < length; i++) {
-    entry = entry[keys[i]] || (entry[keys[i]] = (asArray && (i === last) ? [] : {}));
+    const key = getKey(keys[i], foreign);
+    entry = entry[key] || (entry[key] = (asArray && (i === last) ? [] : {}));
     if (isArray(entry)) {
       if ((i === last) || !entry.length)
         entry.push({});
@@ -40,7 +53,7 @@ const getPath = (keys, entry, asArray) => {
  * @param {string} toml the TOML text to map
  * @param {string[]} strings mapped strings
  * @param {Date[]} dates mapped Dates
- * @returns {[string, {s: string[], d: Date[]}]}
+ * @returns {[string, Foreign]}
  */
 const mapForeign = (toml, strings, dates) => [
   toml
@@ -73,9 +86,11 @@ const parse = toml => {
   for (let line of text.split(/[\r\n]+/)) {
     if ((line = line.trim()) && !line.startsWith('#')) {
       if (/^(\[+)(.*?)\]+/.test(line))
-        entry = getPath(RegExp.$2.trim().split('.'), json, RegExp.$1 !== '[');
-      else if (/^(\S+?)\s*=([^#]+)/.test(line))
-        entry[RegExp.$1] = getValue(RegExp.$2.trim(), foreign);
+        entry = getPath(RegExp.$2.trim().split('.'), foreign, json, RegExp.$1 !== '[');
+      else if (/^(\S+?)\s*=([^#]+)/.test(line)) {
+        const {$1: key, $2: value} = RegExp;
+        entry[getKey(key, foreign)] = getValue(value.trim(), foreign);
+      }
     }
   }
   return json;

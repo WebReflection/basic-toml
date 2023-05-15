@@ -95,7 +95,7 @@ assert(
   `
     # comment
     app = "YOUR_FLY_APP_NAME" # comment
-    kill_signal = "SIGINT"
+    "kill_signal" = "SIGINT"
     kill_timeout = 5
     processes = []
     env = { PORT = "8080" }
@@ -114,7 +114,7 @@ assert(
       processes = ["app"]
       protocol = "tcp"
       script_checks = []
-      [services.concurrency]
+      [services."concurrency"]
         hard_limit = 25
         soft_limit = 20
         type = "connections"

@@ -7,11 +7,11 @@ A simple TOML subset parser. ~500 bytes minified with brotli.
 ## TOML Subset
 
   * [key / value pairs](https://toml.io/en/v1.0.0#keyvalue-pair)
-    * simple, optionally dotted, keys such as `key` or `key.sub`
-    * no quoted keys or spaces around dots in keys
+    * quoted or non-quoted, optionally dotted (within tables and arrays of tables), keys such as `key` or `key.sub` or `"my-key.same"`
+    * **no** spaces around dots in keys
   * [strings](https://toml.io/en/v1.0.0#string)
     * prefer double quotes but it works with single quotes too
-    * no multiline
+    * **no** multiline
   * [integers](https://toml.io/en/v1.0.0#integer) and [floats](https://toml.io/en/v1.0.0#float)
     * must be compatible with JSON
   * [boleans](https://toml.io/en/v1.0.0#boolean)
@@ -33,14 +33,15 @@ version = 0 # any JSON compatible value ... and ...
 # ... dates are returned as Date instance
 when = 1979-05-27T07:32:00-08:00
 
-inline = { OK = true, key = "value" }
+# quoted keys
+"inline" = { OK = true, key = "value" }
 
 # array of JSON compatible entries
 [[externals]]
 src = 'https://cdn.spot.on'
 name = 'spot-on'
 
-[[externals.object]]
+[[externals."special.case"]]
 ok = true
 
 [[preload]]
