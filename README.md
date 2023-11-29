@@ -4,6 +4,8 @@
 
 A simple TOML subset parser. ~540 bytes minified with brotli.
 
+**[Live Demo](https://webreflection.github.io/basic-toml/test/)**
+
 ## TOML Subset
 
   * [key / value pairs](https://toml.io/en/v1.0.0#keyvalue-pair)

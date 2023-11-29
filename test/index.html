@@ -4,16 +4,43 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>basic-toml</title>
+  <style>
+    body {
+      font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1 {
+      font-size: 1.3rem;
+      margin-top: 0;
+    }
+    a {
+      color: initial;
+    }
+    textarea {
+      width: 100%;
+      max-width: 640px;
+      height: 33vh;
+    }
+    button {
+      max-width: 200px;
+      margin: 1rem;
+    }
+  </style>
   <script type="module">
-  import(
-    /^(?:localhost|[::1]|127(?:.d+){3})$/.test(location.hostname) ?
-    '../esm/index.js' :
-    'https://unpkg.com/basic-toml?module'
-  )
-  .then((module) => {
-    console.log(module);
-  });
+  import { parse } from '../es.js';
+
+  transform.onclick = event => {
+    event.preventDefault();
+    json.value = JSON.stringify(parse(toml.value.trim()), null, '  ');
+  };
   </script>
 </head>
-<body></body>
+<body>
+  <h1><a href="https://webreflection.github.io/basic-toml/">basic-toml</a> - A minimalistic TOML parser</h1>
+  <textarea id="toml" placeholder="TOML" spellcheck="false"></textarea>
+  <button id="transform">TOML ↑ to JSON ↓</button>
+  <textarea id="json" placeholder="JSON" spellcheck="false" readonly></textarea>
+</body>
 </html>
