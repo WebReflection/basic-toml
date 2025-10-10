@@ -217,3 +217,15 @@ assert(
     ]
   }
 );
+
+assert(
+  `
+    [files]
+    'file.py' = ""
+  `,
+  {
+    "files": {
+      "file.py": ""
+    }
+  }
+);
