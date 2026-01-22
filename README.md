@@ -27,7 +27,7 @@ A simple TOML subset parser. ~540 bytes minified with brotli.
 
 ```toml
 # any single line comment
-packages = ['a', 'b'] # or end comment
+packages = ['a', 'b', ] # or end comment
 
 # any propety as object (or nested objects)
 [field]
@@ -50,7 +50,7 @@ ok = true
 [[preload]]
 files = [
   './3rd-party.js',
-  './other.js'
+  './other.js',
 ]
 ```
 
