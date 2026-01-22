@@ -69,8 +69,8 @@ const mapForeign = (toml, strings, dates) => [
       value => `"d${dates.push(new Date(value)) - 1}"`
     )
     // avoid multi-line array entries
-    .replace(/,\s*[\r\n]+/g, ', ')
-    .replace(/\[\s*[\r\n]+/g, '[')
+    .replace(/([,[])\s*[\r\n]+/g, '$1 ')
+    // TODO: this is probably not needed
     .replace(/[\r\n]+\s*]/g, ']')
     // remove trailing commas
     .replace(/,\s*]/g, ']'),
