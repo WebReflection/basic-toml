@@ -82,16 +82,14 @@ const mapForeign = (toml, strings, dates) => [
  * @returns {object} the TOML equivalent as JSON serializable
  */
 const parse = toml => {
-  const [text, foreign] = mapForeign(toml, [], []);
-  const json = {};
-  let entry = json;
-  for (let line of text.split(/[\r\n]+/)) {
-    if ((line = line.trim()) && !line.startsWith('#')) {
-      if (/^(\[+)(.*?)\]+/.test(line))
-        entry = getPath(RegExp.$2.trim().split('.'), foreign, json, RegExp.$1 !== '[');
-      else if (/^(\S+?)\s*=([^#]+)/.test(line)) {
-        const {$1: key, $2: value} = RegExp;
-        entry[getKey(key, foreign)] = getValue(value.trim(), foreign);
+  const json = {}, [text, foreign] = mapForeign(toml, [], []);
+  let entry = json, line, match;
+  for (line of text.split(/[\r\n]+/)) {
+    if ((line = line.trim()) && line[0] !== '#') {
+      if ((match = /^(\[+)(.*?)\]+/.exec(line)))
+        entry = getPath(match[2].trim().split('.'), foreign, json, match[1] !== '[');
+      else if ((match = /^(\S+?)\s*=([^#]+)/.exec(line))) {
+        entry[getKey(match[1], foreign)] = getValue(match[2].trim(), foreign);
       }
     }
   }
