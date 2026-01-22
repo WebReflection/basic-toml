@@ -1,6 +1,6 @@
 {
   "name": "basic-toml",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "A simple TOML subset parser",
   "main": "./cjs/index.js",
   "scripts": {
