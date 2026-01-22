@@ -70,7 +70,9 @@ const mapForeign = (toml, strings, dates) => [
     // avoid multi-line array entries
     .replace(/,\s*[\r\n]+/g, ', ')
     .replace(/\[\s*[\r\n]+/g, '[')
-    .replace(/[\r\n]+\s*]/g, ']'),
+    .replace(/[\r\n]+\s*]/g, ']')
+    // remove trailing commas
+    .replace(/,\s*]/g, ']'),
   {s: strings, d: dates}
 ];
 

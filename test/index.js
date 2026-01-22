@@ -22,7 +22,11 @@ assert(
 
     [database]
     server = "192.168.1.1"
-    ports = [ 8000, 8001, 8002 ]
+    ports = [
+      8000,
+      8001,
+      8002,
+    ]
     connection_max = 5000
     enabled = true
 
@@ -38,12 +42,12 @@ assert(
       dc = "eqdc10"
 
     [clients]
-    data = [ ["gamma", "delta"], [1, 2] ]
+    data = [ ["gamma", "delta", ], [1, 2], ]
 
     # Line breaks are OK when inside arrays
     hosts = [
       "alpha",
-      "omega"
+      "omega",
     ]
   `,
   {
