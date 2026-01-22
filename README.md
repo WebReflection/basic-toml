@@ -20,6 +20,7 @@ A simple TOML subset parser. ~540 bytes minified with brotli.
   * all JSON compatible [dates](https://toml.io/en/v1.0.0#offset-date-time)
   * [arrays](https://toml.io/en/v1.0.0#array)
     * also multiline arrays
+    * also with trailing commas
   * [tables](https://toml.io/en/v1.0.0#table)
   * [inline tables](https://toml.io/en/v1.0.0#inline-table)
   * [arrays of tables](https://toml.io/en/v1.0.0#array-of-tables)
